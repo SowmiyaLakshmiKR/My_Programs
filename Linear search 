@@ -1,0 +1,31 @@
+import java.util.Scanner;
+
+public class LinearSearchSimple {
+    public static void main(String[] args) {
+        int[] numbers = {10, 25, 30, 45, 50, 60, 70};  // Array to search in
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number to search: ");
+        int target = scanner.nextInt();
+
+        int result = linearSearch(numbers, target);
+
+        if (result == -1) {
+            System.out.println("Number not found in the array.");
+        } else {
+            System.out.println("Number found at index: " + result);
+        }
+
+        scanner.close();
+    }
+
+    // Linear search method
+    public static int linearSearch(int[] arr, int target) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == target) {
+                return i;  // Target found at index i
+            }
+        }
+        return -1;  // Target not found
+    }
+}
