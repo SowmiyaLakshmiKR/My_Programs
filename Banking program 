@@ -1,0 +1,120 @@
+import java.util.Scanner;
+
+// Base class
+class BankAccount {
+    protected String accountNumber;
+    protected String accountHolder;
+    protected double balance;
+
+    public BankAccount(String accountNumber, String accountHolder, double balance) {
+        this.accountNumber = accountNumber;
+        this.accountHolder = accountHolder;
+        this.balance = balance;
+    }
+
+    public void deposit(double amount) {
+        balance += amount;
+        System.out.println("Deposited: " + amount);
+    }
+
+    public void withdraw(double amount) {
+        if (amount <= balance) {
+            balance -= amount;
+            System.out.println("Withdrawn: " + amount);
+        } else {
+            System.out.println("Insufficient Balance!");
+        }
+    }
+
+    public void displayBalance() {
+        System.out.println("Account Holder: " + accountHolder);
+        System.out.println("Account Number: " + accountNumber);
+        System.out.println("Balance: " + balance);
+    }
+}
+
+// Savings Account (with interest)
+class SavingsAccount extends BankAccount {
+    private double interestRate = 0.05; // 5%
+
+    public SavingsAccount(String accountNumber, String accountHolder, double balance) {
+        super(accountNumber, accountHolder, balance);
+    }
+
+    public void addInterest() {
+        double interest = balance * interestRate;
+        balance += interest;
+        System.out.println("Interest Added: " + interest);
+    }
+}
+
+// Current Account (with overdraft)
+class CurrentAccount extends BankAccount {
+    private double overdraftLimit = 5000;
+
+    public CurrentAccount(String accountNumber, String accountHolder, double balance) {
+        super(accountNumber, accountHolder, balance);
+    }
+
+    @Override
+    public void withdraw(double amount) {
+        if (amount <= balance + overdraftLimit) {
+            balance -= amount;
+            System.out.println("Withdrawn: " + amount);
+        } else {
+            System.out.println("Exceeds overdraft limit!");
+        }
+    }
+}
+
+// Main class
+public class BankingSystem {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Create accounts
+        SavingsAccount sa = new SavingsAccount("S1001", "Alice", 10000);
+        CurrentAccount ca = new CurrentAccount("C2001", "Bob", 5000);
+
+        int choice;
+        do {
+            System.out.println("\n--- Banking System Menu ---");
+            System.out.println("1. Deposit (Savings)");
+            System.out.println("2. Withdraw (Savings)");
+            System.out.println("3. Add Interest (Savings)");
+            System.out.println("4. Display Savings Balance");
+            System.out.println("5. Deposit (Current)");
+            System.out.println("6. Withdraw (Current)");
+            System.out.println("7. Display Current Balance");
+            System.out.println("0. Exit");
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1 -> {
+                    System.out.print("Enter deposit amount: ");
+                    sa.deposit(sc.nextDouble());
+                }
+                case 2 -> {
+                    System.out.print("Enter withdraw amount: ");
+                    sa.withdraw(sc.nextDouble());
+                }
+                case 3 -> sa.addInterest();
+                case 4 -> sa.displayBalance();
+                case 5 -> {
+                    System.out.print("Enter deposit amount: ");
+                    ca.deposit(sc.nextDouble());
+                }
+                case 6 -> {
+                    System.out.print("Enter withdraw amount: ");
+                    ca.withdraw(sc.nextDouble());
+                }
+                case 7 -> ca.displayBalance();
+                case 0 -> System.out.println("Thank you for banking with us!");
+                default -> System.out.println("Invalid choice!");
+            }
+        } while (choice != 0);
+
+        sc.close();
+    }
+}
