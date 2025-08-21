@@ -1,0 +1,30 @@
+import java.util.Scanner;
+
+class Student {
+    private String name;
+    private int[] marks;
+    private int total;
+    private double average;
+    private char grade;
+
+    public Student(String name, int subjects) {
+        this.name = name;
+        marks = new int[subjects];
+    }
+
+    public void inputMarks(Scanner sc) {
+        total = 0;
+        for (int i = 0; i < marks.length; i++) {
+            System.out.print("Enter marks for Subject " + (i + 1) + ": ");
+            marks[i] = sc.nextInt();
+            total += marks[i];
+        }
+        average = (double) total / marks.length;
+        calculateGrade();
+    }
+
+    private void calculateGrade() {
+        if (average >= 90) grade = 'A';
+        else if (average >= 75) grade = 'B';
+        else if (average >= 60) grade = 'C';
+        else if (average >= 50)
