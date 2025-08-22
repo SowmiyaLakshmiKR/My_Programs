@@ -1,0 +1,88 @@
+import java.util.*;
+
+class Book {
+    String title, author;
+    boolean isAvailable;
+
+    Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+        this.isAvailable = true;
+    }
+
+    @Override
+    public String toString() {
+        return title + " by " + author + " (" + (isAvailable ? "Available" : "Borrowed") + ")";
+    }
+}
+
+public class LibrarySystem {
+    static ArrayList<Book> books = new ArrayList<>();
+    static Scanner sc = new Scanner(System.in);
+
+    public static void addBook() {
+        System.out.print("Enter book title: ");
+        String title = sc.nextLine();
+        System.out.print("Enter author: ");
+        String author = sc.nextLine();
+        books.add(new Book(title, author));
+        System.out.println("Book added!");
+    }
+
+    public static void borrowBook() {
+        System.out.print("Enter book title to borrow: ");
+        String title = sc.nextLine();
+        for (Book b : books) {
+            if (b.title.equalsIgnoreCase(title) && b.isAvailable) {
+                b.isAvailable = false;
+                System.out.println("You borrowed: " + b.title);
+                return;
+            }
+        }
+        System.out.println("Book not available!");
+    }
+
+    public static void returnBook() {
+        System.out.print("Enter book title to return: ");
+        String title = sc.nextLine();
+        for (Book b : books) {
+            if (b.title.equalsIgnoreCase(title) && !b.isAvailable) {
+                b.isAvailable = true;
+                System.out.println("You returned: " + b.title);
+                return;
+            }
+        }
+        System.out.println("Book not found!");
+    }
+
+    public static void showBooks() {
+        if (books.isEmpty()) {
+            System.out.println("No books in library!");
+            return;
+        }
+        for (Book b : books) System.out.println(b);
+    }
+
+    public static void main(String[] args) {
+        int choice;
+        do {
+            System.out.println("\n--- Library Menu ---");
+            System.out.println("1. Add Book");
+            System.out.println("2. Borrow Book");
+            System.out.println("3. Return Book");
+            System.out.println("4. Show All Books");
+            System.out.println("0. Exit");
+            System.out.print("Enter choice: ");
+            choice = Integer.parseInt(sc.nextLine());
+
+            switch (choice) {
+                case 1 -> addBook();
+                case 2 -> borrowBook();
+                case 3 -> returnBook();
+                case 4 -> showBooks();
+                case 0 -> System.out.println("Goodbye!");
+                default -> System.out.println("Invalid choice!");
+            }
+        } while (choice != 0);
+    }
+}
