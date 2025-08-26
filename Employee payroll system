@@ -1,0 +1,47 @@
+import java.util.*;
+
+class Employee {
+    String name;
+    double basicSalary, hra, da, tax, netSalary;
+
+    Employee(String name, double basicSalary) {
+        this.name = name;
+        this.basicSalary = basicSalary;
+        calculateSalary();
+    }
+
+    void calculateSalary() {
+        hra = 0.2 * basicSalary;   // 20% of basic
+        da = 0.1 * basicSalary;    // 10% of basic
+        double gross = basicSalary + hra + da;
+
+        tax = 0.1 * gross;         // 10% tax
+        netSalary = gross - tax;
+    }
+
+    void display() {
+        System.out.println("\n--- Salary Slip ---");
+        System.out.println("Employee: " + name);
+        System.out.println("Basic Salary: " + basicSalary);
+        System.out.println("HRA: " + hra);
+        System.out.println("DA: " + da);
+        System.out.println("Tax: " + tax);
+        System.out.println("Net Salary: " + netSalary);
+    }
+}
+
+public class PayrollSystem {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter Employee Name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Enter Basic Salary: ");
+        double salary = sc.nextDouble();
+
+        Employee emp = new Employee(name, salary);
+        emp.display();
+
+        sc.close();
+    }
+}
