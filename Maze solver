@@ -1,0 +1,58 @@
+public class MazeSolver {
+    static int[][] maze = {
+        {1, 0, 1, 1, 1},
+        {1, 1, 1, 0, 1},
+        {0, 1, 0, 1, 1},
+        {1, 1, 1, 1, 0},
+        {1, 0, 1, 1, 1}
+    };
+    static int N = maze.length;
+    static int[][] solution = new int[N][N];
+
+    public static boolean solveMaze(int x, int y) {
+        if (x == N - 1 && y == N - 1 && maze[x][y] == 1) {
+            solution[x][y] = 1;
+            return true;
+        }
+
+        if (isSafe(x, y)) {
+            solution[x][y] = 1;
+
+            // Move right
+            if (solveMaze(x, y + 1)) return true;
+
+            // Move down
+            if (solveMaze(x + 1, y)) return true;
+
+            // Move left
+            if (solveMaze(x, y - 1)) return true;
+
+            // Move up
+            if (solveMaze(x - 1, y)) return true;
+
+            solution[x][y] = 0; // Backtrack
+        }
+        return false;
+    }
+
+    public static boolean isSafe(int x, int y) {
+        return (x >= 0 && x < N && y >= 0 && y < N && maze[x][y] == 1 && solution[x][y] == 0);
+    }
+
+    public static void printSolution() {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++)
+                System.out.print(solution[i][j] + " ");
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        if (solveMaze(0, 0)) {
+            System.out.println("Path Found:");
+            printSolution();
+        } else {
+            System.out.println("No Path Found!");
+        }
+    }
+}
