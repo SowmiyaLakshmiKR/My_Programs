@@ -1,0 +1,77 @@
+import java.util.*;
+
+class ATM {
+    private String pin = "1234";
+    private double balance = 5000;
+
+    public boolean authenticate(String inputPin) {
+        return pin.equals(inputPin);
+    }
+
+    public void deposit(double amount) {
+        balance += amount;
+        System.out.println("Deposited: " + amount);
+    }
+
+    public void withdraw(double amount) {
+        if (amount <= balance) {
+            balance -= amount;
+            System.out.println("Withdrawn: " + amount);
+        } else {
+            System.out.println("Insufficient balance!");
+        }
+    }
+
+    public void checkBalance() {
+        System.out.println("Current Balance: " + balance);
+    }
+}
+
+public class ATMSimulator {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ATM atm = new ATM();
+        int attempts = 0;
+
+        System.out.print("Enter PIN: ");
+        String pin = sc.nextLine();
+
+        while (!atm.authenticate(pin)) {
+            attempts++;
+            if (attempts == 3) {
+                System.out.println("Too many wrong attempts. Card blocked!");
+                sc.close();
+                return;
+            }
+            System.out.print("Wrong PIN! Try again: ");
+            pin = sc.nextLine();
+        }
+
+        int choice;
+        do {
+            System.out.println("\n--- ATM Menu ---");
+            System.out.println("1. Deposit");
+            System.out.println("2. Withdraw");
+            System.out.println("3. Check Balance");
+            System.out.println("0. Exit");
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1 -> {
+                    System.out.print("Enter amount: ");
+                    atm.deposit(sc.nextDouble());
+                }
+                case 2 -> {
+                    System.out.print("Enter amount: ");
+                    atm.withdraw(sc.nextDouble());
+                }
+                case 3 -> atm.checkBalance();
+                case 0 -> System.out.println("Thank you! Goodbye.");
+                default -> System.out.println("Invalid option!");
+            }
+        } while (choice != 0);
+
+        sc.close();
+    }
+}
