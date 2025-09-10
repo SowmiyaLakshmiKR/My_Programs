@@ -1,0 +1,53 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class FileEncryptDecrypt {
+    private static final int SHIFT = 3; // Caesar Cipher shift
+
+    public static void encrypt(String inputFile, String outputFile) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                if (Character.isLetter(ch)) {
+                    char base = Character.isUpperCase(ch) ? 'A' : 'a';
+                    ch = (ch - base + SHIFT) % 26 + base;
+                }
+                writer.write(ch);
+            }
+        }
+        System.out.println("File encrypted successfully!");
+    }
+
+    public static void decrypt(String inputFile, String outputFile) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+
+            int ch;
+            while ((ch = reader.read()) != -1) {
+                if (Character.isLetter(ch)) {
+                    char base = Character.isUpperCase(ch) ? 'A' : 'a';
+                    ch = (ch - base - SHIFT + 26) % 26 + base;
+                }
+                writer.write(ch);
+            }
+        }
+        System.out.println("File decrypted successfully!");
+    }
+
+    public static void main(String[] args) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter input file path: ");
+        String input = sc.nextLine();
+        System.out.print("Enter encrypted output file path: ");
+        String encFile = sc.nextLine();
+        System.out.print("Enter decrypted output file path: ");
+        String decFile = sc.nextLine();
+
+        encrypt(input, encFile);
+        decrypt(encFile, decFile);
+
+        sc.close();
+    }
+}
