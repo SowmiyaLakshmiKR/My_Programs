@@ -1,0 +1,112 @@
+import java.io.*;
+import java.util.*;
+
+class TodoList {
+    private List<String> tasks = new ArrayList<>();
+    private static final String FILE = "tasks.txt";
+
+    public TodoList() {
+        loadTasks();
+    }
+
+    public void addTask(String task) {
+        tasks.add(task);
+        saveTasks();
+        System.out.println("Task added!");
+    }
+
+    public void deleteTask(int index) {
+        if (index >= 0 && index < tasks.size()) {
+            tasks.remove(index);
+            saveTasks();
+            System.out.println("Task deleted!");
+        } else {
+            System.out.println("Invalid index!");
+        }
+    }
+
+    public void markDone(int index) {
+        if (index >= 0 && index < tasks.size()) {
+            tasks.set(index, "[DONE] " + tasks.get(index));
+            saveTasks();
+            System.out.println("Task marked as done!");
+        } else {
+            System.out.println("Invalid index!");
+        }
+    }
+
+    public void showTasks() {
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks yet.");
+            return;
+        }
+        System.out.println("\n--- To-Do List ---");
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println(i + ". " + tasks.get(i));
+        }
+    }
+
+    private void saveTasks() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE))) {
+            for (String task : tasks) {
+                writer.write(task);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving tasks.");
+        }
+    }
+
+    private void loadTasks() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                tasks.add(line);
+            }
+        } catch (IOException e) {
+            // Ignore if file not found (first run)
+        }
+    }
+}
+
+public class TodoApp {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        TodoList todo = new TodoList();
+
+        int choice;
+        do {
+            System.out.println("\n--- To-Do Menu ---");
+            System.out.println("1. Add Task");
+            System.out.println("2. Delete Task");
+            System.out.println("3. Mark Task as Done");
+            System.out.println("4. Show All Tasks");
+            System.out.println("0. Exit");
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+            sc.nextLine(); // consume newline
+
+            switch (choice) {
+                case 1 -> {
+                    System.out.print("Enter task: ");
+                    todo.addTask(sc.nextLine());
+                }
+                case 2 -> {
+                    todo.showTasks();
+                    System.out.print("Enter task index to delete: ");
+                    todo.deleteTask(sc.nextInt());
+                }
+                case 3 -> {
+                    todo.showTasks();
+                    System.out.print("Enter task index to mark done: ");
+                    todo.markDone(sc.nextInt());
+                }
+                case 4 -> todo.showTasks();
+                case 0 -> System.out.println("Goodbye!");
+                default -> System.out.println("Invalid choice!");
+            }
+        } while (choice != 0);
+
+        sc.close();
+    }
+}
