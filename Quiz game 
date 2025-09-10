@@ -1,0 +1,49 @@
+import java.util.*;
+
+class Question {
+    String question, optionA, optionB, optionC, optionD;
+    char correctAnswer;
+
+    Question(String q, String a, String b, String c, String d, char correct) {
+        question = q;
+        optionA = a; optionB = b; optionC = c; optionD = d;
+        correctAnswer = correct;
+    }
+
+    public boolean ask(Scanner sc) {
+        System.out.println("\n" + question);
+        System.out.println("A. " + optionA);
+        System.out.println("B. " + optionB);
+        System.out.println("C. " + optionC);
+        System.out.println("D. " + optionD);
+        System.out.print("Your answer: ");
+        char ans = sc.next().toUpperCase().charAt(0);
+        return ans == correctAnswer;
+    }
+}
+
+public class QuizGame {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        ArrayList<Question> questions = new ArrayList<>();
+        questions.add(new Question("Which language is used for Android development?", "Python", "Java", "C#", "Kotlin", 'D'));
+        questions.add(new Question("Who developed Java?", "Google", "Sun Microsystems", "Microsoft", "Oracle", 'B'));
+        questions.add(new Question("Which keyword is used to inherit a class in Java?", "extends", "implements", "super", "this", 'A'));
+
+        int score = 0;
+        for (Question q : questions) {
+            if (q.ask(sc)) {
+                System.out.println("✅ Correct!");
+                score++;
+            } else {
+                System.out.println("❌ Wrong!");
+            }
+        }
+
+        System.out.println("\n--- Quiz Over ---");
+        System.out.println("Your score: " + score + "/" + questions.size());
+
+        sc.close();
+    }
+}
