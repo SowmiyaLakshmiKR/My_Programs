@@ -1,0 +1,33 @@
+import java.io.*;
+import java.util.*;
+
+class Student {
+    String name;
+    int rollNo;
+    int[] marks;
+    double average;
+    char grade;
+
+    Student(String name, int rollNo, int[] marks) {
+        this.name = name;
+        this.rollNo = rollNo;
+        this.marks = marks;
+        calculateAverageAndGrade();
+    }
+
+    private void calculateAverageAndGrade() {
+        int sum = 0;
+        for (int m : marks) sum += m;
+        average = sum / (double) marks.length;
+
+        if (average >= 90) grade = 'A';
+        else if (average >= 75) grade = 'B';
+        else if (average >= 60) grade = 'C';
+        else if (average >= 40) grade = 'D';
+        else grade = 'F';
+    }
+
+    @Override
+    public String toString() {
+        return "Roll No: " + rollNo + ", Name: " + name +
+                ", Average
